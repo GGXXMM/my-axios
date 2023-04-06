@@ -1,4 +1,4 @@
-function transform(data, headers, fns) {
+export default function transform(data, headers, fns) {
   if (!fns) {
     return data;
   }
@@ -10,5 +10,3 @@ function transform(data, headers, fns) {
   });
   return data;
 }
-
-module.exports = transform;

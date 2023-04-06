@@ -15,7 +15,7 @@ module.exports = function xhrAdapter(config) {
       xsrfHeaderName,
     } = config;
 
-    const request = new XMLHttpRequest();
+    const request = new XMLHttpRequest() || new ActiveXObject('Microsoft.XMLHTTP');
 
     if (responseType) {
       request.responseType = responseType;

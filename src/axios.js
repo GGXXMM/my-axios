@@ -1,7 +1,6 @@
-'use strict';
-
-var defaults = require('./default');
-var Axios = require('./core/Axios');
+import Axios from './core/Axios';
+import defaults from './default';
+import mergeConfig from './core/mergeConfig';
 
 // 创建 axios 实例的工厂函数
 function createInstance(defaultConfig) {
@@ -13,6 +12,11 @@ function createInstance(defaultConfig) {
 }
 
 const axios = createInstance(defaults);
+
+// 支持 create 创建请求，并自定义配置
+axios.create = function(config) {
+  return createInstance(mergeConfig(defaults, config));
+}
 
 // 支持 es module、commonjs模块导出
 export default axios;
