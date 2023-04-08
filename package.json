@@ -10,6 +10,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.5.1",
     "@commitlint/config-conventional": "^17.4.4",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.38.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
@@ -17,6 +18,11 @@
   },
   "scripts": {
     "prepare": "husky install"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "repository": {
     "type": "git",
