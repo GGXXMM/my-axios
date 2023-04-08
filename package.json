@@ -17,7 +17,8 @@
     "prettier": "^2.8.7"
   },
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "commit": "git add . && git cz"
   },
   "lint-staged": {
     "src/*.{js,ts,jsx,tsx}": [
