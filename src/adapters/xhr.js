@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = function xhrAdapter(config) {
+const isXHRAdapterSupport = typeof XMLHttpRequest !== 'undefined'
+
+export default isXHRAdapterSupport && function xhrAdapter(config) {
   return new Promise((resolve, reject) => {
     let {
       data = null,

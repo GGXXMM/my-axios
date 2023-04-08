@@ -1,3 +1,16 @@
+"use strict";
+import xhrAdapter from "./adapters/xhr";
+import httpAdapter from "./adapters/http";
+
+const getDefaultAdapter = () => {
+  let adapter;
+  if (typeof XMLHttpRequest !== "undefined") {
+    adapter = xhrAdapter;
+  }else{
+    adapter = httpAdapter;
+  }
+  return adapter;
+};
 const defaults = {
   method: "get",
   timeout: 0,
@@ -6,6 +19,7 @@ const defaults = {
       Accept: "application/json, text/plain, */*",
     },
   },
+  adapter: getDefaultAdapter()
 };
 
 const methodsNoData = ["delete", "get", "head", "options"];

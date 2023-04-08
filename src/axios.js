@@ -1,3 +1,5 @@
+'use strict';
+import utils from './utils';
 import Axios from './core/Axios';
 import defaults from './default';
 import mergeConfig from './core/mergeConfig';
@@ -8,6 +10,9 @@ function createInstance(defaultConfig) {
   const context = new Axios(defaultConfig)
   // 变量 instance 保存了 Axios 类上的 request 方法
   const instance = Axios.prototype.request.bind(context)
+  // 继承 Axios 实例上的方法
+  utils.extend(instance, Axios.prototype, context);
+  
   return instance;
 }
 

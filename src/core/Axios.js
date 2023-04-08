@@ -1,3 +1,4 @@
+'use strict';
 import utils from '../utils';
 import dispatchRequest  from './dispatchRequest';
 import InterceptorManager from './InterceptorManager';

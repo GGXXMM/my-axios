@@ -1,3 +1,4 @@
+'use strict';
 /**
  *
  * @param {Object} config1

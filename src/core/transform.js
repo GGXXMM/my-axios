@@ -1,3 +1,4 @@
+'use strict';
 export default function transform(data, headers, fns) {
   if (!fns) {
     return data;

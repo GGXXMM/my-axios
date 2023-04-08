@@ -40,11 +40,27 @@ function forEach(obj, fn, { allOwnKeys = false } = {}) {
   }
 }
 
+// 继承
+const extend = (to, from, ctx) => {
+  // 继承方法
+  Object.getOwnPropertyNames(from).forEach((key)=> {
+    to[key] = from[key].bind(ctx);
+  });
+  // 继承 ctx 自身属性
+  for(let val in ctx) {
+    if(ctx.hasOwnProperty(val)) {
+      to[val] = ctx[val];
+    }
+  }
+  return to;
+}
+
 // 判断是否是数组
 const { isArray } = Array;
 
 
 export default {
     forEach,
-    isArray
+    isArray,
+    extend
 }
