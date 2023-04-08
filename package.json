@@ -19,6 +19,16 @@
   "scripts": {
     "prepare": "husky install"
   },
+  "lint-staged": {
+    "src/*.{js,ts,jsx,tsx}": [
+      "eslint",
+      "prettier --write"
+    ],
+    "*.css": "prettier --write",
+    "*.html": "prettier --write",
+    "*.md": "prettier --write",
+    "*.json": "prettier --write"
+  },
   "config": {
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
