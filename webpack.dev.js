@@ -5,7 +5,7 @@ module.exports = {
   mode: "development",
   devtool: "cheap-source-map",
   devServer: {
-    contentBase: "./examples",
+    static: "./examples",
     open: true, // 自动打开浏览器
     port: 8088,
     hot: true,

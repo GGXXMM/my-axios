@@ -1,7 +1,8 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { merge } = require("webpack-merge");
-const devConfig = require("./webpack.dev")
+const devConfig = require("./webpack.dev");
+const proConfig = require("./webpack.pro");
 
 const commonConfig = {
   entry: "./src/axios.js",
@@ -24,9 +25,9 @@ const commonConfig = {
   },
   plugins: [new CleanWebpackPlugin()]
 };
-module.exports = () => {
-  if (process.env && process.env.NODE_ENV == 'production') {
-
+module.exports = (env) => {
+  if (env && env.production) {
+    return merge(commonConfig, proConfig)
   } else {
     return merge(commonConfig, devConfig)
   }
