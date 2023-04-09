@@ -1,8 +1,8 @@
-'use strict';
-import utils from '../utils';
-import dispatchRequest  from './dispatchRequest';
-import InterceptorManager from './InterceptorManager';
-import mergeConfig from './mergeConfig';
+"use strict";
+import { forEach } from "../utils";
+import dispatchRequest from "./dispatchRequest";
+import InterceptorManager from "./InterceptorManager";
+import mergeConfig from "./mergeConfig";
 
 class Axios {
   constructor(instanceConfig) {
@@ -15,25 +15,26 @@ class Axios {
   /**
    * Dispatch a request
    */
-  request(configOrUrl, config) {
+  request(url, config) {
     // 处理 config
-    if(typeof config === 'string'){
-      config = config || {};
-      config.url = configOrUrl;
-    }
-    if (config.method) {
-      config.method = config.method.toLowerCase();// 转换成小写
-    } else if (this.defaults.method) {
-      config.method = this.defaults.method.toLowerCase();
+    if (typeof url === "string") {
+      if (!config) {
+        config = {};
+      }
+      config.url = url;
     } else {
-      config.method = 'get';
+      config = url;
     }
+
     // 合并config
-    
-    const chain = [{
-      resolved: dispatchRequest,
-      rejected: undefined,
-    }]
+    config = mergeConfig(this.defaults, config);
+
+    const chain = [
+      {
+        resolved: dispatchRequest,
+        rejected: undefined,
+      },
+    ];
 
     this.interceptors.request.forEach((interceptor) => {
       chain.unshift(interceptor);
@@ -55,31 +56,39 @@ class Axios {
 }
 
 // Provide aliase for supported request methods
-utils.forEach(['get', 'delete', 'head', 'options'], function forEachMethodNoData(method) {
-  Axios.prototype[method] = function(url, config) {
-    return this.request(mergeConfig(config || {}, {
-      method,
-      url,
-      data: (config || {}).data
-    }))
-  }
-})
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  function generateHTTPMethod(isForm) {
-    return function httpMethod(url, data, config) {
-      return this.request(mergeConfig(config || {}, {
-        method,
-        headers: isForm ? {
-          'Content-Type': 'multipart/form-data'
-        } : {},
-        url,
-        data
-      }));
+forEach(
+  ["get", "delete", "head", "options"],
+  function forEachMethodNoData(method) {
+    Axios.prototype[method] = function (url, config) {
+      return this.request(
+        mergeConfig(config || {}, {
+          method,
+          url,
+        })
+      );
     };
   }
-  Axios.prototype[method] = generateHTTPMethod()
-  Axios.prototype[method + 'Form'] = generateHTTPMethod(true)
-})
+);
+
+forEach(["post", "put", "patch"], function forEachMethodWithData(method) {
+  function generateHTTPMethod(isForm) {
+    return function httpMethod(url, data, config) {
+      return this.request(
+        mergeConfig(config || {}, {
+          method,
+          headers: isForm
+            ? {
+                "Content-Type": "multipart/form-data",
+              }
+            : {},
+          url,
+          data,
+        })
+      );
+    };
+  }
+  Axios.prototype[method] = generateHTTPMethod();
+  Axios.prototype[method + "Form"] = generateHTTPMethod(true);
+});
 
 export default Axios;

@@ -1,8 +1,7 @@
-'use strict';
+"use strict";
+import { parseHeaders } from "../helpers/headers";
 
-const isXHRAdapterSupport = typeof XMLHttpRequest !== 'undefined'
-
-export default isXHRAdapterSupport && function xhrAdapter(config) {
+export default function xhrAdapter(config) {
   return new Promise((resolve, reject) => {
     let {
       data = null,
@@ -17,7 +16,8 @@ export default isXHRAdapterSupport && function xhrAdapter(config) {
       xsrfHeaderName,
     } = config;
 
-    const request = new XMLHttpRequest() || new ActiveXObject('Microsoft.XMLHTTP');
+    const request =
+      new XMLHttpRequest() || new ActiveXObject("Microsoft.XMLHTTP");
 
     if (responseType) {
       request.responseType = responseType;
@@ -41,7 +41,9 @@ export default isXHRAdapterSupport && function xhrAdapter(config) {
       if (request.status === 0) {
         return;
       }
-  
+
+      // 返回的 header 是字符串，通过 parseHeaders 解析成对象
+      const responseHeaders = parseHeaders(request.getAllResponseHeaders());
       const responseData =
         responseType && responseType !== "text"
           ? request.response
@@ -58,19 +60,19 @@ export default isXHRAdapterSupport && function xhrAdapter(config) {
       if (response.status >= 200 && response.status < 300) {
         resolve(response);
       } else {
-        reject();
+        reject(new Error(`Request failed with status code ${response.status}`));
       }
     };
     // 监听错误
     request.onerror = () => {
-      reject();
+      reject(new Error(`Network Error`));
     };
     // 监听超时
     request.ontimeout = () => {
       // ECONNABORTED 通常表示一个被中止的请求
-      reject();
+      reject(new Error(`Timeout of ${config.timeout} ms exceeded`));
     };
 
     request.send(data);
   });
-};
+}

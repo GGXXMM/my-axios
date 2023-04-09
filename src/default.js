@@ -5,8 +5,13 @@ import httpAdapter from "./adapters/http";
 const getDefaultAdapter = () => {
   let adapter;
   if (typeof XMLHttpRequest !== "undefined") {
+    // 浏览器环境
     adapter = xhrAdapter;
-  }else{
+  } else if (
+    typeof process !== "undefined" &&
+    Object.prototype.toString.call(process) === "[object process]"
+  ) {
+    // node环境
     adapter = httpAdapter;
   }
   return adapter;
@@ -14,12 +19,12 @@ const getDefaultAdapter = () => {
 const defaults = {
   method: "get",
   timeout: 0,
-  Headers: {
+  headers: {
     common: {
       Accept: "application/json, text/plain, */*",
     },
   },
-  adapter: getDefaultAdapter()
+  adapter: getDefaultAdapter(),
 };
 
 const methodsNoData = ["delete", "get", "head", "options"];

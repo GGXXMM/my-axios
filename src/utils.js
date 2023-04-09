@@ -5,7 +5,7 @@
  * @param {Boolean} [allOwnKeys = false]
  * @returns {any}
  */
-function forEach(obj, fn, { allOwnKeys = false } = {}) {
+export function forEach(obj, fn, { allOwnKeys = false } = {}) {
   // Don't bother if no value provided
   if (obj === null || typeof obj === "undefined") {
     return;
@@ -41,26 +41,33 @@ function forEach(obj, fn, { allOwnKeys = false } = {}) {
 }
 
 // 继承
-const extend = (to, from, ctx) => {
+export const extend = (to, from, ctx) => {
   // 继承方法
-  Object.getOwnPropertyNames(from).forEach((key)=> {
+  Object.getOwnPropertyNames(from).forEach((key) => {
     to[key] = from[key].bind(ctx);
   });
   // 继承 ctx 自身属性
-  for(let val in ctx) {
-    if(ctx.hasOwnProperty(val)) {
+  for (let val in ctx) {
+    if (ctx.hasOwnProperty(val)) {
       to[val] = ctx[val];
     }
   }
   return to;
-}
+};
+
+// 判断是否是日期
+export const isDate = (val) => {
+  return Object.prototype.toString.call(val) === "[object Date]";
+};
+
+// 判断是否是对象
+export const isObject = (val) => {
+  return Object.prototype.toString.call(val) === "[object Object]";
+};
 
 // 判断是否是数组
 const { isArray } = Array;
 
-
-export default {
-    forEach,
-    isArray,
-    extend
-}
+export const isURLSearchParams = (val) => {
+  return typeof val !== "undefined" && val instanceof URLSearchParams;
+};

@@ -1,5 +1,3 @@
-import axios from '../src/axios';
-
 // 调用 axios 的 get 方法发送请求，可以想象它还有 POST，PUT，DELETE 等 HTTP 协议支持的方法
 axios.get('/user?ID=12345')
   .then(function (response) {

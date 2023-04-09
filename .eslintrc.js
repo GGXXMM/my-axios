@@ -4,10 +4,10 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  parser: "babel-eslint",
+  parser: "@babel/eslint-parser",
   extends: "eslint:recommended",
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 8,
     sourceType: "module",
   },
   rules: {
