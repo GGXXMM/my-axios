@@ -1,5 +1,5 @@
 "use strict";
-import { isDate, isObject, isURLSearchParams } from "../utils";
+import { isDate, isPlainObject, isURLSearchParams } from "../utils";
 
 export const encode = (val) => {
   return encodeURIComponent(val)
@@ -40,7 +40,7 @@ export const buildURL = (url, params) => {
         if (isDate(val)) {
           // toISOString返回Date对象的标准的日期时间字符串格式的字符串
           val = val.toISOString();
-        } else if (isObject(val)) {
+        } else if (isPlainObject(val)) {
           val = JSON.stringify(val);
         }
         // 处理参数结果

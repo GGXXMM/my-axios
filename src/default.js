@@ -1,6 +1,8 @@
 "use strict";
 import xhrAdapter from "./adapters/xhr";
 import httpAdapter from "./adapters/http";
+import { processHeaders } from "./helpers/headers";
+import { transformRequest, transformResponse } from "./helpers/data";
 
 const getDefaultAdapter = () => {
   let adapter;
@@ -19,6 +21,17 @@ const getDefaultAdapter = () => {
 const defaults = {
   method: "get",
   timeout: 0,
+  transformRequest: [
+    function (data, headers) {
+      processHeaders(headers, data);
+      return transformRequest(data);
+    },
+  ],
+  transformResponse: [
+    function (data) {
+      return transformResponse(data);
+    },
+  ],
   headers: {
     common: {
       Accept: "application/json, text/plain, */*",

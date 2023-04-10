@@ -9,6 +9,7 @@ const transformURL = config => {
 }
 const processConfig = config => {
   config.url = transformURL(config)
+  config.data = transform(config.data, config.headers, config.transformRequest);
 }
 const transformResponseData = res => {
   res.data = transform(res.data, res.headers, res.config.transformResponse);

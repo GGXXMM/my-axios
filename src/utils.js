@@ -61,7 +61,7 @@ export const isDate = (val) => {
 };
 
 // 判断是否是对象
-export const isObject = (val) => {
+export const isPlainObject = (val) => {
   return Object.prototype.toString.call(val) === "[object Object]";
 };
 
