@@ -3,6 +3,8 @@ import { extend } from "./utils";
 import Axios from "./core/Axios";
 import defaults from "./default";
 import mergeConfig from "./core/mergeConfig";
+import CancelToken from "./cancel/CancelToken";
+import { Cancel, isCancel } from "./cancel/Cancel";
 
 // 创建 axios 实例的工厂函数
 function createInstance(defaultConfig) {
@@ -17,6 +19,9 @@ function createInstance(defaultConfig) {
 }
 
 const axios = createInstance(defaults);
+axios.CancelToken = CancelToken;
+axios.Cancel = Cancel;
+axios.isCancel = isCancel;
 
 // 支持 create 创建请求，并自定义配置
 axios.create = function (config) {

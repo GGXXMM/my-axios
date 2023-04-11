@@ -2,13 +2,19 @@
 import { buildURL } from '../helpers/url';
 import transform from './transform';
 import defaults from '../default';
+import { processHeaders } from '../helpers/headers';
 
 const transformURL = config => {
   const {url, params} = config;
   return buildURL(url, params);
 }
+const transformHeader = config => {
+  const { headers = {}, data} = config;
+  return processHeaders(headers, data);
+}
 const processConfig = config => {
-  config.url = transformURL(config)
+  config.url = transformURL(config);
+  config.headers = transformHeader(config);
   config.data = transform(config.data, config.headers, config.transformRequest);
 }
 const transformResponseData = res => {

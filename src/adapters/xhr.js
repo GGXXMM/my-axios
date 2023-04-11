@@ -1,5 +1,7 @@
 "use strict";
 import { parseHeaders } from "../helpers/headers";
+import { isURLSameOrigin } from "../utils";
+import cookie from "../helpers/cookie";
 
 export default function xhrAdapter(config) {
   return new Promise((resolve, reject) => {
@@ -16,6 +18,7 @@ export default function xhrAdapter(config) {
       xsrfHeaderName,
     } = config;
 
+    /*global ActiveXObject*/
     const request =
       new XMLHttpRequest() || new ActiveXObject("Microsoft.XMLHTTP");
 
@@ -26,7 +29,7 @@ export default function xhrAdapter(config) {
     if (timeout) {
       request.timeout = timeout;
     }
-
+    // 跨域请求，是否携带 cookie
     if (withCredentials) {
       request.withCredentials = withCredentials;
     }
@@ -72,6 +75,41 @@ export default function xhrAdapter(config) {
       // ECONNABORTED 通常表示一个被中止的请求
       reject(new Error(`Timeout of ${config.timeout} ms exceeded`));
     };
+
+    /** CSFR */
+    // 如果配置是 withCredentials 是 true
+    if((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
+      // 通过 cookie 去读取对应的 xsrfCookieName（即为 token）
+      const xsrfValue = cookie.read(xsrfCookieName);
+      if(xsrfValue && xsrfHeaderName) {
+        // 将 cookie 读取的 token 字段添加到 header
+        headers[xsrfHeaderName] = xsrfValue;
+      }
+    }
+
+    // 遍历处理 header
+    Object.keys(headers).forEach(name => {
+      // 如果 data 为空，删除 content-type
+      if(data === null && name.toLowerCase() === 'content-type') {
+        delete headers[name]
+      }else{
+        // 给请求设置 header
+        request.setRequestHeader(name, headers[name])
+      }
+    })
+    
+    // cancel
+    if(cancelToken) {
+      cancelToken.promise
+        .then(reason => {
+          // 终止请求
+          request.abort()
+          reject(reason)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    }
 
     request.send(data);
   });

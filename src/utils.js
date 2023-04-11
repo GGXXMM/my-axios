@@ -71,3 +71,23 @@ const { isArray } = Array;
 export const isURLSearchParams = (val) => {
   return typeof val !== "undefined" && val instanceof URLSearchParams;
 };
+
+// 判断是否是相同域
+const urlParsingNode = document.createElement("a");
+const currentOrigin = _resolveURL(window.location.href);
+
+function _resolveURL(url) {
+  urlParsingNode.setAttribute("href", url);
+  const { protocol, host } = urlParsingNode;
+  return {
+    protocol,
+    host,
+  };
+}
+export function isURLSameOrigin(requestURL) {
+  const parsedOrigin = _resolveURL(requestURL);
+  return (
+    parsedOrigin.protocol === currentOrigin.protocol &&
+    parsedOrigin.host === currentOrigin.host
+  );
+}
