@@ -14,9 +14,15 @@
 
 - [x] src/core/InterceptorManager.js
 
-### 四、默认/自定义配置
+### 四、配置
+
+#### 默认配置
 
 - [x] src/default.js
+
+#### 合并默认、自定义用户配置
+
+- [x] src/core/mergeConfig.js
 
 ### 五、转换请求/响应数据
 
