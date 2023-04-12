@@ -1,3 +1,4 @@
+"use strict";
 /**
  * 对象/数组遍历函数
  * @param {Object|Array} obj
@@ -91,3 +92,21 @@ export function isURLSameOrigin(requestURL) {
     parsedOrigin.host === currentOrigin.host
   );
 }
+
+// 深度合并拷贝
+export const deepMerge = (...objs) => {
+  const result = Object.create(null);
+  objs.forEach((obj) => {
+    if (obj) {
+      Object.keys(obj).forEach((key) => {
+        const val = obj[key];
+        if (isPlainObject(obj)) {
+          result[key] = deepMerge(val);
+        } else {
+          result[key] = val;
+        }
+      });
+    }
+  });
+  return result;
+};
